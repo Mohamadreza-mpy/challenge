@@ -22,7 +22,7 @@ class PostApiTest extends TestCase
                 ->has(Comment::factory()->count(5)))
             ->create();
 
-        $response = $this->getJson('/api/v1/posts');
+        $response = $this->getJson('/api/posts');
 
         $response
             ->assertStatus(200)
@@ -40,7 +40,7 @@ class PostApiTest extends TestCase
             ->has(Post::factory()->count(10))
             ->create();
 
-        $response = $this->getJson('/api/v1/posts?author_id=' . $author->id);
+        $response = $this->getJson('/api/posts?author_id=' . $author->id);
 
         $response
             ->assertStatus(200)
@@ -58,7 +58,7 @@ class PostApiTest extends TestCase
         $post = $author->posts->first();
         $encodedTitle = urlencode($post->title);
 
-        $response = $this->getJson('/api/v1/posts?title=' . $encodedTitle);
+        $response = $this->getJson('/api/posts?title=' . $encodedTitle);
 
         $response
             ->assertStatus(200)
@@ -69,13 +69,13 @@ class PostApiTest extends TestCase
     #[Test]
     public function it_validates_query_parameters()
     {
-        $response = $this->getJson('/api/v1/posts?author_id=invalid');
+        $response = $this->getJson('/api/posts?author_id=invalid');
 
         $response
             ->assertStatus(422)
             ->assertJsonValidationErrors(['author_id']);
 
-        $response = $this->getJson('/api/v1/posts?per_page=200');
+        $response = $this->getJson('/api/posts?per_page=200');
 
         $response
             ->assertStatus(422)
